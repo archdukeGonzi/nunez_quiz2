@@ -1,0 +1,44 @@
+section .data
+a db 1
+b db 2
+c db 3
+d db 4
+
+section .bss
+x resd 1
+
+section .text
+global _start
+
+_start:
+
+; x = (a x b) + (c x d)
+
+; load a and b, multiply and store in eax
+mov al, [a]      
+mov bl, [b]      
+mul bl          
+
+; store in x
+mov [x], eax
+
+; load x edx
+mov edx, [x]
+
+; clear eax
+xor eax, eax
+
+; load c and d, multiply and store in eax
+mov al, [c]      
+mov bl, [d]      
+imul bl          
+
+; edx = edx + eax
+add edx, eax     
+
+; store the final result in x
+mov [x], edx
+
+; exit
+mov eax, 1       
+int 0x80         
