@@ -1,0 +1,27 @@
+section .data
+
+    array db 2,4, 6
+    result db 0
+
+section .bss
+    output resb 10
+
+section .text
+    global _start
+
+_start:
+    push DWORD, [num1]
+
+    call _largest
+
+_largest:
+
+    push ebp
+    mov ebp, esp
+    sub esp, 4
+
+    mov eax, DWORD[ebp+8]
+
+
+
+]
