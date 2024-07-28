@@ -1,0 +1,31 @@
+section .data
+    num db 5     
+
+section .bss
+    result resb 1          
+
+section .text
+    global _start
+
+_start:
+
+    ; first iteration of code example
+
+    mov al, 1              ; al = 1 
+    mov cl, [num]          ; cl = 5
+
+_factorial:
+
+    cmp cl, 0              ; compare cl(5) with 0
+    je _end                ; if cl is zero, we've reached the end of our factorial, since 5! = 5x4x3x2x1
+
+    imul cl                ; al(5) * cl(1), al = 5
+    dec cl                 ; cl(4) = 5 - 1
+
+    jmp _factorial         ; in the second iteration, we'll multiply 5 * 4 and acutally start our factorial loop
+
+_end:
+
+    mov [result], eax    
+    mov eax, 1            
+    int 0x80               
