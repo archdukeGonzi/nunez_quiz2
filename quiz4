@@ -1,0 +1,60 @@
+
+section .data
+
+    x db 1
+    y db 2
+    z db 3
+
+section .bss
+    result resb 1
+    
+section .text
+        global _start
+        
+_start:
+
+    ; moving variables into registers so I can push onto stack
+
+    mov al, [x]
+    push eax
+
+    mov bl, [y]
+    push ebx
+
+    mov cl, [z]
+    push ecx
+
+    ; calling function
+    
+    call _sum
+
+    mov eax, 1
+    int 0x80
+    
+_sum:
+    
+    push ebp
+    mov ebp, esp
+
+    mov eax, DWORD[ebp+8]
+    mov ecx, DWORD[ebp+12]
+
+    ; adding x and y
+    add eax, ecx
+
+    ; adding the sum of x, y to z
+    mov ecx, DWORD[ebp+16]
+    add eax, ecx
+
+
+    mov [result], eax
+
+    ; i believe the code below can deallocate memory
+
+    pop ecx     ; pop the value from top of the stack (z)
+    pop ebx     ; pop the next value from stack (y)
+    pop eax     ; pop last from stack (x)
+
+    leave
+    ret
+    
