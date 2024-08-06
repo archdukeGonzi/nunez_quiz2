@@ -1,0 +1,56 @@
+section .data
+    
+    even_result db " The number is even ", 0xa 
+    len_e equ $ - even_result  ; length of even message
+    
+    odd_result db " The number is odd ", 0xa  ; odd message
+    len_o equ $ - odd_result  ; length of odd message
+    
+
+section .text
+        global _start
+        
+_start:
+
+     push 2
+     call _parity
+     mov eax, 1
+     int 0x80
+    
+_parity:
+    
+    push ebp
+    mov ebp, esp
+    sub esp, 4
+
+    mov eax, DWORD[ebp+8]
+    mov ecx, DWORD[ebp+12]
+    add eax, ecx
+    mov DWORD[ebp-4], eax
+    
+    test eax, 1b
+    
+    jnz odd
+    
+    jz even
+    
+    leave
+    ret
+    
+even:
+    mov edx, len_e
+    mov ecx, even_result
+    mov ebx, 1
+    mov eax, 4
+    int 0x80
+    leave
+    ret
+
+odd:
+    mov edx, len_o
+    mov ecx, odd_result
+    mov ebx, 1
+    mov eax, 4
+    int 0x80
+    leave
+    ret
